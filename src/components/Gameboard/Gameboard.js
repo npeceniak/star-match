@@ -20,6 +20,12 @@ const PlayNumber = (props) => (
     </ button>
 )
 
+const PlayAgain = (props) => (
+    <div>
+        <button>Play Again?</button>
+    </div>
+)
+
 
 const Gameboard = () => {
     const [stars, setStars] = useState(utils.random(1, 9));
@@ -27,6 +33,7 @@ const Gameboard = () => {
     const [candidateNums, setCandidateNums] = useState([]);
 
     const candidatesAreWrong = utils.sum(candidateNums) > stars;
+    const gameOver = availableNums.length === 0;
 
     const numberStatus = number => {
         if (!availableNums.includes(number)) {
@@ -55,6 +62,7 @@ const Gameboard = () => {
                 n => !newCandidateNums.includes(n)
             );
             setStars(utils.randomSumIn(newAvailableNums, 9));
+            console.log(availableNums);
             setAvailableNums(newAvailableNums);
             setCandidateNums([]);
         }
@@ -64,7 +72,9 @@ const Gameboard = () => {
     return (
         <div id='gameboard'>
             <div className='left'>
-                <StarsDisplay count={stars} />
+                {
+                    gameOver ? (<PlayAgain />) : (<StarsDisplay count={stars} />)
+                }
             </div>
             <div className='right'>
                 {utils.range(1, 9).map(number => (
