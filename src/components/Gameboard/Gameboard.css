@@ -1,0 +1,54 @@
+#gameboard {
+    text-align: center;
+    max-width: 80%;
+    margin: 10px auto;
+    border: 3px;
+    border-style: solid;
+    border-color: deepskyblue;
+    display: flex;
+
+}
+
+.star {
+	display: inline-block;
+  margin: 0 15px;
+}
+
+.star:after {
+  content: "\2605";
+  font-size: 45px;
+}
+
+.number {
+    background-color: #eee;
+    border: thin solid #ddd;
+    width: 45px;
+    height: 45px;
+    margin: 10px;
+    font-size: 25px;
+}
+  
+.number:focus, .number:active {
+    outline: none;
+    border: thin solid #ddd;
+}
+
+  
+.help {
+    color: #666;
+    margin: 10px;
+    text-align: center;
+}
+
+.left {
+    text-align: center;
+    width: 50%;
+    border: thin solid #ddd;
+}
+
+.right {
+    text-align: center;
+    padding: 10px;
+    width: 50%;
+    border: thin solid #ddd;
+}
