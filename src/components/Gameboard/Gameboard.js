@@ -9,22 +9,26 @@ const StarsDisplay = (props) => {
     )
 }
 
-const NumberDisplay = (props) => {
+const PlayNumber = (props) => {
     return (
-        <>
-            {utils.range(1, props.numStars).map(id => <button key={id} className='number'>{id}</ button>)}
-        </>
+        <button key={props.id} className='number'>{props.id}</ button>
     )
 }
 
 const Gameboard = (props) => {
+    console.log(props);
+    const numStars = props.availableNums.length;
     return (
         <div id='gameboard'>
             <div className='left'>
-                <StarsDisplay numStars={props.numStars} />
+                <StarsDisplay numStars={numStars} />
             </div>
             <div className='right'>
-                <NumberDisplay numStars={props.numStars} />
+                {
+                    props.availableNums.map(num => {
+                        return (<PlayNumber id={num}/>)
+                    })
+                }
             </div>
         </div>
     );

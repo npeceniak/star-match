@@ -2,11 +2,9 @@ import { useState } from 'react';
 import './Settings.css'
 
 const Settings = (props) => {
-
     const [state, setState] = useState(0);
     const onSubmit = (event) => {
         event.preventDefault();
-        setState(state);
         props.updateStarSetting(state);
     }
 
