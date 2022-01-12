@@ -31,3 +31,10 @@ export const randomSumIn = (arr, max) => {
     }
     return sums[random(0, sums.length - 1)];
 }
+
+export const colors = {
+    available: 'lightgray',
+    used: 'lightgreen',
+    wrong: 'lightcoral',
+    candidate: 'deepskyblue',
+};
