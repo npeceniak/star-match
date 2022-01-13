@@ -1,6 +1,6 @@
 import './Gameboard.css';
 import * as utils from '../../utils/math'
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 const StarsDisplay = props => (
     <>
@@ -21,19 +21,41 @@ const PlayNumber = (props) => (
 )
 
 const PlayAgain = (props) => (
-    <div>
-        <button>Play Again?</button>
+    <div className='game-done'>
+        <div className='message'>
+            {
+                props.gameStatus === 'won' ? "You Won!" : "Times Up"
+            }
+        </div>
+        <button onClick={props.onClick}>Play Again?</button>
     </div>
 )
+
+const LeftBox = (props) => {
+    if(props.gameStatus !== "running"){
+        return (<PlayAgain onClick={props.onClick} gameStatus={props.gameStatus} />)
+    }
+    return (<StarsDisplay count={props.stars} />)
+};
 
 
 const Gameboard = () => {
     const [stars, setStars] = useState(utils.random(1, 9));
     const [availableNums, setAvailableNums] = useState(utils.range(1, 9));
     const [candidateNums, setCandidateNums] = useState([]);
+    const [secondsLeft, setSecondsLeft] = useState([10]);
+
+    // Runs every time the component renders.
+    useEffect(() => {
+        if(secondsLeft > 0 && availableNums.length > 0){
+            const timerId = setTimeout(() => { setSecondsLeft(secondsLeft - 1) }, 1000);
+            return () => {clearTimeout(timerId)}
+        }
+    });
 
     const candidatesAreWrong = utils.sum(candidateNums) > stars;
-    const gameOver = availableNums.length === 0;
+    // TODO: Use function to compute game status instead of nested ternary
+    const gameStatus = availableNums.length === 0 ? 'won' : secondsLeft > 0 ? 'running' :'lost';
 
     const numberStatus = number => {
         if (!availableNums.includes(number)) {
@@ -46,7 +68,7 @@ const Gameboard = () => {
     };
 
     const onNumberClick = (number, currentStatus) => {
-        if (currentStatus === 'used') {
+        if (currentStatus === 'used' || gameStatus !== 'running') {
             return;
         }
 
@@ -68,23 +90,33 @@ const Gameboard = () => {
         }
     };
 
+    const resetGame = () => {
+        setStars(utils.random(1, 9));
+        setAvailableNums(utils.range(1, 9));
+        setCandidateNums([]);
+        setSecondsLeft(10);
+    }
+
 
     return (
-        <div id='gameboard'>
-            <div className='left'>
-                {
-                    gameOver ? (<PlayAgain />) : (<StarsDisplay count={stars} />)
-                }
+        <div>
+            <div id='gameboard'>
+                <div className='left'>
+                    <LeftBox gameStatus={gameStatus} stars={stars} onClick={resetGame} />
+                </div>
+                <div className='right'>
+                    {utils.range(1, 9).map(number => (
+                        <PlayNumber
+                            key={number}
+                            status={numberStatus(number)}
+                            number={number}
+                            onClick={onNumberClick}
+                        />
+                    ))}
+                </div>
             </div>
-            <div className='right'>
-                {utils.range(1, 9).map(number => (
-                    <PlayNumber
-                        key={number}
-                        status={numberStatus(number)}
-                        number={number}
-                        onClick={onNumberClick}
-                    />
-                ))}
+            <div className='timer'>
+                Time Remaining: {secondsLeft}
             </div>
         </div>
     );

@@ -52,3 +52,14 @@
     width: 50%;
     border: thin solid #ddd;
 }
+
+.timer {
+    margin-top: 3px;
+    margin-left: 3px;
+}
+
+.game-done .message {
+    font-size: 250%;
+    font-weight: bold;
+    margin: 15px;
+}
